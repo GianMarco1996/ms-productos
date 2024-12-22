@@ -1,0 +1,205 @@
+openapi: 3.0.0
+info:
+  title: Product
+  description: API para gestionar los productos.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Servidor local
+paths:
+  /product/list:
+    get:
+      summary: Devuelve los productos del banco
+      operationId: getProducts
+      description: Obtiene los productos.
+      responses:
+        "200":
+          description: "Operación finalizada correctamente"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductResponse"
+        "500":
+          description: "Errores técnicos"
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Error en el servidor."
+  /product:
+    post:
+      summary: Registra un producto al banco
+      operationId: registerProduct
+      description: Crea un nuevo producto
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductRequest"
+      responses:
+        "200":
+          description: "Operación finalizada correctamente"
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Se registro de forma exitosa."
+        "500":
+          description: "Errores técnicos"
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Error en el servidor."
+  /product/{id}:
+    get:
+      summary: Obtiene un producto del banco
+      operationId: getProduct
+      description: Obtiene un producto por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+            example: "6764c17cb1fa3cd77d0644d8"
+      responses:
+        "200":
+          description: "Operación finalizada correctamente"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductResponse"
+        "404":
+          description: "No se encontró el producto"
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Producto no encontrado."
+        "500":
+          description: "Errores técnicos"
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Error en el servidor."
+    put:
+      summary: Actualiza un producto del banco
+      operationId: updateProduct
+      description: Actualiza un producto por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+            example: "6764c17cb1fa3cd77d0644d8"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductRequest"
+      responses:
+        "200":
+          description: "Operación finalizada correctamente"
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Se actualizo de forma exitosa."
+        "500":
+          description: "Errores técnicos"
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Error en el servidor."
+    delete:
+      summary: Elimina un producto del banco
+      operationId: removeProduct
+      description: Actualiza un producto por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+            example: "6764c17cb1fa3cd77d0644d8"
+      responses:
+        "500":
+          description: "Errores técnicos"
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Error en el servidor."
+components:
+  schemas:
+    ProductResponse:
+      type: object
+      properties:
+        id:
+          description: "Id del producto"
+          type: string
+          example: "6764c17cb1fa3cd77d0644d8"
+        name:
+          description: "Nombre del producto"
+          type: string
+          example: "Ahorro"
+        category:
+          description: "Categoria del producto"
+          type: string
+          example: "Ahorro"
+        type:
+          description: "tipo del producto"
+          type: string
+          example: "Pasivo"
+        description:
+          description: "Descripción del producto"
+          type: string
+          example: "Cuenta bancaria"
+    ProductRequest:
+      type: object
+      required:
+        - name
+        - category
+        - type
+      properties:
+        name:
+          description: "Nombre del producto"
+          type: string
+          example: "Ahorro"
+        category:
+          description: "Categoria del producto"
+          type: string
+          example: "Ahorro"
+        type:
+          description: "tipo del producto"
+          type: string
+          example: "Pasivo"
+        description:
+          description: "Descripción del producto"
+          type: string
+          example: "Cuenta bancaria"
